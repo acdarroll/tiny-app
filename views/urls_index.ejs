@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include ./partials/_head %>
+</head>
+
+<body>
+  <% include ./partials/_header %>
+  <div class="jumbotron">
+    <h2>Shortened URLs</h2>
+      <% for(var path in urls) { %>
+      <li><%= urls[path] %> - <%= path %>
+      <% }; %>
+    <a href="/urls/new"><p>Shorten URL</p></a>
+  </div>
+</body>
+
+</html>
