@@ -7,12 +7,16 @@
 
 <body>
   <% include ./partials/_header %>
-  <div class="jumbotron">
+  <div>
     <h2>Shortened URLs</h2>
       <% for(var path in urls) { %>
       <li><%= urls[path] %> - <%= path %>
+        <form action='/urls_method=DELETE' method='POST' value="DELETE">
+          <input type='submit' value='DELETE'>
+        </form>
+      </li>
       <% }; %>
-    <a href="/urls/new"><p>Shorten URL</p></a>
+    <a href='/urls/new'><p>Shorten URL</p></a>
   </div>
 </body>
 

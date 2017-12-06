@@ -23,18 +23,18 @@ function generateRandomString() {
 }
 
 
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase}
+  let templateVars = { urls: urlDatabase};
   res.render("urls_index", templateVars);
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
+  console.log(req.body);
   var shortUrl = generateRandomString();
   urlDatabase[shortUrl] = req.body.longURL;
-  res.redirect(303, `/urls/${shortUrl}`);         // Respond with 'Ok' (we will replace this)
+  res.redirect(303, `/urls/${shortUrl}`);   // Redirect to the generated short url after a form submission
 });
 
 app.get("/urls/new", (req, res) => {
@@ -43,9 +43,9 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/u/:id", (req, res) => {
   if (urlDatabase.hasOwnProperty(req.params.id)) {
-    res.redirect(307, urlDatabase[req.params.id]);
+    res.redirect(307, urlDatabase[req.params.id]);  // Redirect to the longurl of the short url
   } else {
-    res.redirect(307, '/urls/new');
+    res.redirect(307, '/urls/new');   // Redirect to the form submission if the short url does not exist
   }
 });
 
@@ -54,7 +54,7 @@ app.get("/urls/:id", (req, res) => {
     let templateVars = { shortURL: req.params.id, urls: urlDatabase };
     res.render("urls_show", templateVars);
   } else {
-    res.sendStatus(404).end();
+    res.sendStatus(404).end();    // Send a 404 response when the short url is not in the database
   }
 });
 
