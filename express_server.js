@@ -25,12 +25,13 @@ var generateRandomString = function() {
 }
 
 app.use(methodOverride('_method'));
+app.use(cookieParser());
 app.set('view engine', 'ejs');
 
 app.get('/urls', (req, res) => {
   let templateVars = {
     urls: urlDatabase,
-    username: req.headers['cookie']
+    username: req.cookies['username']
   }
 
   res.render("urls_index", templateVars);
@@ -50,7 +51,7 @@ app.delete('/urls/:id/delete', (req, res) => {
 
 app.get('/urls/new', (req, res) => {
   let templateVars = {
-    username: req.headers['cookie']
+    username: req.cookies['username']
   }
 
   res.render('urls_new', templateVars);
@@ -85,7 +86,7 @@ app.get('/urls/:id', (req, res) => {
     let templateVars = {
       shortURL: req.params.id,
       urls: urlDatabase,
-      username: req.headers['cookie']
+      username: req.cookies['username']
     }
 
     res.render('urls_show', templateVars);
