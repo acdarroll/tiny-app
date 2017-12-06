@@ -90,11 +90,15 @@ app.post('/register', (req, res) => {
 
 /*  NEW URLS  */
 app.get('/urls/new', (req, res) => {
-  let templateVars = {
-    user: users[req.cookies['user_id']]
-  }
+  if(req.cookies['user_id']) {
+    let templateVars = {
+      user: users[req.cookies['user_id']]
+    }
 
-  res.render('urls_new', templateVars);
+    res.render('urls_new', templateVars);
+  } else {
+    res.redirect('/login')
+  }
 });
 
 /*  LOGIN AND LOGOUT  */
