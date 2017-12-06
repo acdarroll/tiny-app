@@ -9,8 +9,13 @@
   <% include ./partials/_header %>
   <div>
     <h2>Shortened URL</h2>
-      <p>Showing page for:</p>
-      <li><%= urls[shortURL] %></li>
+      <p>Here is the short URL:</p>
+        <li><%= [shortURL] %> --> <%= urls[shortURL] %></li>
+        <form action='/urls/<%= [shortURL] %>?_method=PUT' method='POST'>
+          <label for:"longURL">Enter an updated URL:</label>
+          <input id='longURL' type='text' name='longURL' value='<%= urls[shortURL] %>' style='width: 300px'>
+          <input type='submit' value='Update'>
+        </form>
       <a href="/urls"><p>Go Back to URLs</p></a>
   </div>
 </body>

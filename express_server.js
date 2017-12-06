@@ -55,6 +55,11 @@ app.get('/u/:id', (req, res) => {
   }
 });
 
+app.put('/urls/:id', (req, res) => {
+  urlDatabase[req.params.id] = req.body.longURL;
+  res.redirect(`/urls/${req.params.id}`);   // Redirect to the generated short url after a form submission
+});
+
 app.get('/urls/:id', (req, res) => {
   if (urlDatabase.hasOwnProperty(req.params.id)) {
     let templateVars = { shortURL: req.params.id, urls: urlDatabase };
