@@ -8,7 +8,20 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 var PORT = process.env.PORT || 8080; // default port 8080
 
-let urlDatabase = {
+const users = {
+  "h2h": {
+    id: "h2h",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "brb": {
+    id: "brb",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
+
+const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
 };
@@ -28,6 +41,7 @@ app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.set('view engine', 'ejs');
 
+/*  INDEX PAGE  */
 app.get('/urls', (req, res) => {
   let templateVars = {
     urls: urlDatabase,
@@ -44,11 +58,26 @@ app.post('/urls', (req, res) => {
   res.redirect(303, `/urls/${shortUrl}`);   // Redirect to the generated short url after a form submission
 });
 
-app.delete('/urls/:id/delete', (req, res) => {
-  delete urlDatabase[req.params.id];
+/*  REGISTER  */
+app.get('/register', (req, res) => {
+  let templateVars = {
+    username: req.cookies['username']
+  }
+  res.render('urls_register', templateVars);
+});
+
+app.post('/register', (req, res) => {
+  var userId = generateRandomString();
+  users[userId] = {
+    id: userId,
+    email: req.body.email,
+    password: req.body.password
+  }
+  res.cookie('user_id', userId);
   res.redirect('/urls');
 });
 
+/*  NEW URLS  */
 app.get('/urls/new', (req, res) => {
   let templateVars = {
     username: req.cookies['username']
@@ -57,14 +86,7 @@ app.get('/urls/new', (req, res) => {
   res.render('urls_new', templateVars);
 });
 
-app.get('/u/:id', (req, res) => {
-  if (urlDatabase.hasOwnProperty(req.params.id)) {
-    res.redirect(307, urlDatabase[req.params.id]);  // Redirect to the longurl of the short url
-  } else {
-    res.redirect(307, '/urls/new');   // Redirect to the form submission if the short url does not exist
-  }
-});
-
+/*  LOGIN AND LOGOUT  */
 app.post('/login', (req, res) => {
   res.cookie('username', req.body.username);
   res.redirect('/urls');
@@ -75,6 +97,16 @@ app.post('/logout', (req, res) => {
   res.redirect('/urls');
 });
 
+/*  REDIRECT WEBSITE  */
+app.get('/u/:id', (req, res) => {
+  if (urlDatabase.hasOwnProperty(req.params.id)) {
+    res.redirect(307, urlDatabase[req.params.id]);  // Redirect to the longurl of the short url
+  } else {
+    res.redirect(307, '/urls/new');   // Redirect to the form submission if the short url does not exist
+  }
+});
+
+/*  URL SHORT URLS  */
 app.put('/urls/:id', (req, res) => {
   urlDatabase[req.params.id] = req.body.longURL;
 
@@ -93,6 +125,11 @@ app.get('/urls/:id', (req, res) => {
   } else {
     res.sendStatus(404).end();    // Send a 404 response when the short url is not in the database
   }
+});
+
+app.delete('/urls/:id/delete', (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect('/urls');
 });
 
 app.listen(PORT, () => {
