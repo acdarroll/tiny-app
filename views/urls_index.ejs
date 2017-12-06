@@ -3,6 +3,11 @@
 
 <head>
   <% include ./partials/_head %>
+  <style>
+    #form {
+      -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    }
+  </style>
 </head>
 
 <body>
@@ -11,8 +16,11 @@
     <h2>Shortened URLs</h2>
       <% for(var path in urls) { %>
         <form action='/urls/<%= path %>/delete?_method=DELETE' method='POST' value="DELETE">
-          <input type='submit' value='Delete'>
-          <a><%= path %> --> <%= urls[path] %></a>
+          <div id='form'>
+            <a><%= path %> --> <%= urls[path] %></a>
+            <a href='/urls/<%= path %>'>Edit</a>
+            <input type='submit' value='Delete'>
+          </div>
         </form>
       <% }; %>
     <a href='/urls/new'><p>Shorten URL</p></a>
