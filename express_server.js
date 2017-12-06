@@ -45,7 +45,7 @@ app.set('view engine', 'ejs');
 app.get('/urls', (req, res) => {
   let templateVars = {
     urls: urlDatabase,
-    username: req.cookies['username']
+    user: users[req.cookies['username']]
   }
 
   res.render("urls_index", templateVars);
@@ -61,35 +61,64 @@ app.post('/urls', (req, res) => {
 /*  REGISTER  */
 app.get('/register', (req, res) => {
   let templateVars = {
-    username: req.cookies['username']
+    user: users[req.cookies['username']]
   }
   res.render('urls_register', templateVars);
 });
 
 app.post('/register', (req, res) => {
   var userId = generateRandomString();
-  users[userId] = {
-    id: userId,
-    email: req.body.email,
-    password: req.body.password
+  for(var user in users) {
+    console.log(req.body.email, users[user].email);
+    if(users[user].email === req.body.email) {
+      res.sendStatus(400);
+    }
   }
-  res.cookie('user_id', userId);
-  res.redirect('/urls');
+
+  if(req.body.email && req.body.password) {
+    users[userId] = {
+      id: userId,
+      email: req.body.email,
+      password: req.body.password
+    }
+
+    res.cookie('user_id', userId);
+    res.redirect('/urls');
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 /*  NEW URLS  */
 app.get('/urls/new', (req, res) => {
   let templateVars = {
-    username: req.cookies['username']
+    user: users[req.cookies['username']]
   }
 
   res.render('urls_new', templateVars);
 });
 
 /*  LOGIN AND LOGOUT  */
+app.get('/login', (req, res) => {
+  let templateVars = {
+    user: users[req.cookies['username']]
+  }
+
+  res.render('urls_login', templateVars);
+});
+
 app.post('/login', (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect('/urls');
+  for(var user in users) {
+    if(users[user].email === req.body.email) {
+      if(users[user].password === req.body.password) {
+        res.cookie('user_id', req.body['user_id']);
+        res.redirect('/urls');
+      } else {
+        res.sendStatus(403).send("Wrong password");
+      }
+    }
+  }
+  res.sendStatus(403).send('User not found');
 });
 
 app.post('/logout', (req, res) => {
@@ -118,7 +147,7 @@ app.get('/urls/:id', (req, res) => {
     let templateVars = {
       shortURL: req.params.id,
       urls: urlDatabase,
-      username: req.cookies['username']
+      user: users[req.cookies['username']]
     }
 
     res.render('urls_show', templateVars);
