@@ -206,17 +206,16 @@ app.put('/urls/:id', (req, res) => {
 });
 
 app.get('/urls/:id', (req, res) => {
-  if (urlDatabase.hasOwnProperty(req.params.id)) {
-    let templateVars = {
-      shortUrl: req.params.id,
-      url: urlDatabase[req.params.id],
-      user: users[req.session.userId]
-    }
-
-    res.render('urls_show', templateVars);
-  } else {
-    res.sendStatus(404).end();    // Send a 404 response when the short url is not in the database
+  let templateVars = {
+    shortUrl: req.params.id,
+    url: urlDatabase[req.params.id],
+    user: users[req.session.userId]
   }
+
+  res.render('urls_show', templateVars);
+  // } else {
+  //   res.sendStatus(404).end();    // Send a 404 response when the short url is not in the database
+  // }
 });
 
 app.delete('/urls/:id/delete', (req, res) => {

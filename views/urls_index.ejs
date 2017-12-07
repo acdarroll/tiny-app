@@ -14,28 +14,32 @@
       <div class='row'>
         <ul class='list-group'>
           <li class='list-group-item'>
-            <div>
-              <form action='/urls/<%= url.shortUrl %>/delete?_method=DELETE' method='POST' value="Delete">
-                <p><%= url.shortUrl %> --> <%= url.longUrl %></p>
+            <div class='d-inline'>
+              <a><%= url.shortUrl %> --> <%= url.longUrl %></a>
             </div>
-            <div>
-                <a href='/urls/<%= url.shortUrl %>'>Edit</a>
+            <div class='d-inline'>
+              <a href='/urls/<%= url.shortUrl %>'>Edit</a>
+            </div>
+            <form class='form-inline' action='/urls/<%= url.shortUrl %>/delete?_method=DELETE' method='POST' value="Delete">
+              <div class='form-group'>
                 <input class='btn btn-danger' type='submit' value='Delete'>
-              </form>
-            </div>
+              </div>
+            </form>
           </li>
         </ul>
       </div>
     </div>
   <% });
   } else { %>
-    <div class='container text-center'>
-      <h2>Please Login!</h2>
+    <div class='container'>
+      <div class='alert alert-info text-center'>
+        <h2><strong>Please Login!</strong></h2>
+      </div>
     </div>
   <% } %>
-  <div class='container text-center'>
-    <a href='/urls/new' class='text-center'>Shorten a URL</a>
-  </div>
+    <div class='container text-center'>
+      <a href='/urls/new' class='text-center'>Create a New Short Link</a>
+    </div>
 </body>
 
 </html>
