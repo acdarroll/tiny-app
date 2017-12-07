@@ -188,6 +188,8 @@ app.get('/urls/:id', (req, res) => {
       user: users[req.cookies['user_id']]
     }
 
+    console.log(templateVars);
+
     res.render('urls_show', templateVars);
   } else {
     res.sendStatus(404).end();    // Send a 404 response when the short url is not in the database
