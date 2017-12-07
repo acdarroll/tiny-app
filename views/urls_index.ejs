@@ -4,9 +4,6 @@
 <head>
   <% include ./partials/_head %>
   <style>
-    #form {
-      -webkit-column-count: 3; /* Chrome, Safari, Opera */
-    }
   </style>
 </head>
 
@@ -14,15 +11,20 @@
   <% include ./partials/_header %>
   <div>
     <h2>Shortened URLs</h2>
-      <% for(var path in urls) { %>
-        <form action='/urls/<%= path %>/delete?_method=DELETE' method='POST' value="DELETE">
+      <% if(user) {
+        urls.forEach( function(url) {
+          console.log(urls) %>
+        <form action='/urls/<%= url.shortUrl %>/delete?_method=DELETE' method='POST' value="Delete">
           <div id='form'>
-            <a><%= path %> --> <%= urls[path] %></a>
-            <a href='/urls/<%= path %>'>Edit</a>
+            <a><%= url.shortUrl %> --> <%= url.longUrl %></a>
+            <a href='/urls/<%= url.shortUrl %>'>Edit</a>
             <input type='submit' value='Delete'>
           </div>
         </form>
-      <% }; %>
+      <% });
+      } else { %>
+        <h2>Please Login!</h2>
+      <% } %>
     <a href='/urls/new'><p>Shorten URL</p></a>
   </div>
 </body>

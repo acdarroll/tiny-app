@@ -10,10 +10,10 @@
   <div>
     <h2>Shortened URL</h2>
       <p>Here is the short URL:</p>
-        <li><%= [shortURL] %> --> <%= urls[shortURL] %></li>
-        <form action='/urls/<%= [shortURL] %>?_method=PUT' method='POST'>
+        <li><%= shortUrl %> --> <%= url.longUrl %></li>
+        <form action='/urls/<%= shortUrl %>?_method=PUT' method='POST'>
           <label for:"longURL">Enter an updated URL:</label>
-          <input id='longURL' type='text' name='longURL' value='<%= urls[shortURL] %>' style='width: 300px'>
+          <input id='longURL' type='text' name='longURL' value='<%= url.longUrl %>' style='width: 300px'>
           <input type='submit' value='Update'>
         </form>
       <a href="/urls"><p>Go Back to URLs</p></a>
