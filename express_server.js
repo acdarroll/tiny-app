@@ -2,27 +2,30 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 
 let app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 
 var PORT = process.env.PORT || 8080; // default port 8080
 
+const saltRounds = 10;
+
 const users = {
   "h2h": {
     id: "h2h",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync('purple-monkey-dinosaur', saltRounds)
   },
   "lhl": {
     id: "lhl",
     email: "ajc@gmail.com",
-    password: "never"
+    password: bcrypt.hashSync('never', saltRounds)
   },
  "brb": {
     id: "brb",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync('dishwasher-funk', saltRounds)
   }
 }
 
@@ -113,7 +116,7 @@ app.post('/register', (req, res) => {
     users[userId] = {
       id: userId,
       email: req.body.email,
-      password: req.body.password
+      password: bcrypt.hashSync(req.body.password, saltRounds)
     }
 
     res.cookie('user_id', userId);
@@ -148,7 +151,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   for(var user in users) {
     if(users[user].email === req.body.email) {
-      if(users[user].password === req.body.password) {
+      if(bcrypt.compareSync(req.body.password, users[user].password)) {
         res.cookie('user_id', users[user].id);
         res.redirect('/urls');
       } else {
