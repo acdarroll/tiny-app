@@ -73,6 +73,16 @@ let urlsForUser = function(id) {
 }
 
 /*  INDEX PAGE  */
+app.get('/', (req, res) => {
+  let userId = req.session.userId;
+
+  if(userId) {
+    res.redirect('/urls');
+  } else {
+    res.redirect('/login');
+  }
+});
+
 app.get('/urls', (req, res) => {
   let userUrls = [];
   let userId = req.session.userId;
