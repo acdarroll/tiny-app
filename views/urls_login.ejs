@@ -4,33 +4,24 @@
     <% include ./partials/_head %>
   </head>
     <% include ./partials/_header %>
-    <div class='container'>
-      <h2>Login</h2>
+    <div class='container text-center'>
       <% if(!user) { %>
+       <h2>Login</h2>
         <form class='form-horizontal' action='/login' method='POST'>
           <div class='form-group'>
-            <label class='control-label col-sm-2' for='email'>Email:</label>
-            <div class='col-sm-6'>
-              <input class='form-control' id='email' type="email" name="email" placeholder="Enter email">
-            </div>
-            <div class='col-sm-4'>
-            </div>
+            <label class='control-label' for='email'>Email:</label>
+            <input class='form-control' id='email' type="email" name="email" placeholder="Enter email">
           </div>
           <div class='form-group'>
-            <label class='control-label col-sm-2' for='pwd'>Password:</label>
-            <div class='col-sm-6'>
-              <input class='form-control' id='pwd' type="password" name="password" placeholder="password">
-            </div>
-            <div class='col-sm-4'>
-            </div>
+            <label class='control-label' for='pwd'>Password:</label>
+            <input class='form-control' id='pwd' type="password" name="password" placeholder="password">
           </div>
           <div class='form-group'>
-            <div class='col-sm-offset-2'>
-              <input class='btn btn-primary' type='submit' value='Login'>
-            </div>
+            <input class='btn btn-primary' type='submit' value='Login'>
           </div>
         </form>
       <% } else { %>
+       <h2>Logout</h2>
         <form class='form-horizontal' action='/logout' method='POST'>
           <div class='form-group'>
             <input class='btn btn-primary' type='submit' value='Logout'>

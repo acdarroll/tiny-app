@@ -1,8 +1,12 @@
-<div class="jumbotron">
-  <a>TinyApp</a>
-  <div class='text-right'>
-    <a> <% if(user) { %> <%=user.email%> <% } %> </a>
-    <a href='/login' class='btn btn-default' role='button'><% if(user) { %>Logout<% } else { %>Login<% } %></a>
-    <a href='/register' class='btn btn-default' role='button'>Register</a>
+<div class='jumbotron'>
+  <div class='container'>
+    <div class='pull-left align-bottom'>
+      <h1>TinyApp <small><small>Create short URLs</small></small></h1>
+    </div>
+    <div class='pull-right align-bottom'>
+      <a> <% if(user) { %> <%=user.email%> <% } %> </a>
+      <a href='/login' class='btn btn-default' role='button'><% if(user) { %>Logout<% } else { %>Login<% } %></a>
+      <a href='/register' class='btn btn-default' role='button'>Register</a>
+    </div>
   </div>
 </div>

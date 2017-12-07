@@ -1,11 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 
 let app = express();
+
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
+app.use(cookieSession( {
+  name: 'session',
+  keys: ['random string', 'another random'],
+  maxAge: 1000 * 60 * 60
+}));
+
+app.set('view engine', 'ejs');
 
 var PORT = process.env.PORT || 8080; // default port 8080
 
@@ -63,21 +72,18 @@ let urlsForUser = function(id) {
   return userUrls;
 }
 
-
-app.use(methodOverride('_method'));
-app.use(cookieParser());
-app.set('view engine', 'ejs');
-
 /*  INDEX PAGE  */
 app.get('/urls', (req, res) => {
   let userUrls = [];
-  if(req.cookies['user_id']) {
-    userUrls = urlsForUser(req.cookies['user_id']);
-  }
-  console.log(userUrls);
+  let userId = req.session.userId;
+
   let templateVars = {
-    urls: userUrls,
-    user: users[req.cookies['user_id']]
+    user: users[userId]
+  }
+
+  if(users[userId]) {
+    userUrls = urlsForUser(userId);
+    templateVars.urls = userUrls
   }
 
   res.render("urls_index", templateVars);
@@ -85,7 +91,7 @@ app.get('/urls', (req, res) => {
 
 app.post('/urls', (req, res) => {
   let shortUrl = generateRandomString();
-  let userId = req.cookies['user_id'];
+  let userId = req.session.userId;
 
   urlDatabase[shortUrl] = {
     userId: userId,
@@ -99,13 +105,13 @@ app.post('/urls', (req, res) => {
 /*  REGISTER  */
 app.get('/register', (req, res) => {
   let templateVars = {
-    user: users[req.cookies['user_id']]
+    user: users[req.session.userId]
   }
   res.render('urls_register', templateVars);
 });
 
 app.post('/register', (req, res) => {
-  var userId = generateRandomString();
+  var generatedId = generateRandomString();
   for(var user in users) {
     if(users[user].email === req.body.email) {
       res.sendStatus(400);
@@ -113,13 +119,14 @@ app.post('/register', (req, res) => {
   }
 
   if(req.body.email && req.body.password) {
-    users[userId] = {
-      id: userId,
+    users[generatedId] = {
+      id: generatedId,
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, saltRounds)
     }
 
-    res.cookie('user_id', userId);
+    req.session.userId = users[generatedId].id;
+
     res.redirect('/urls');
   } else {
     res.sendStatus(400);
@@ -128,9 +135,9 @@ app.post('/register', (req, res) => {
 
 /*  NEW URLS  */
 app.get('/urls/new', (req, res) => {
-  if(req.cookies['user_id']) {
+  if(req.session.userId) {
     let templateVars = {
-      user: users[req.cookies['user_id']]
+      user: users[req.session.userId]
     }
 
     res.render('urls_new', templateVars);
@@ -142,7 +149,7 @@ app.get('/urls/new', (req, res) => {
 /*  LOGIN AND LOGOUT  */
 app.get('/login', (req, res) => {
   let templateVars = {
-    user: users[req.cookies['user_id']]
+    user: users[req.session.userId]
   }
 
   res.render('urls_login', templateVars);
@@ -152,7 +159,7 @@ app.post('/login', (req, res) => {
   for(var user in users) {
     if(users[user].email === req.body.email) {
       if(bcrypt.compareSync(req.body.password, users[user].password)) {
-        res.cookie('user_id', users[user].id);
+        req.session.userId = users[user].id;
         res.redirect('/urls');
       } else {
         res.sendStatus(403).send("Wrong password");
@@ -163,7 +170,7 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/logout', (req, res) => {
-  res.clearCookie('user_id');
+  req.session = null;
   res.redirect('/urls');
 });
 
@@ -178,7 +185,7 @@ app.get('/u/:id', (req, res) => {
 
 /*  URL SHORT URLS  */
 app.put('/urls/:id', (req, res) => {
-  if(urlDatabase[req.params.id].userId === req.cookies['user_id']) {
+  if(urlDatabase[req.params.id].userId === req.session.userId) {
     urlDatabase[req.params.id].longUrl = req.body.longURL;
 
   res.redirect(`/urls/${req.params.id}`);   // Redirect to the generated short url after a form submission
@@ -193,10 +200,8 @@ app.get('/urls/:id', (req, res) => {
     let templateVars = {
       shortUrl: req.params.id,
       url: urlDatabase[req.params.id],
-      user: users[req.cookies['user_id']]
+      user: users[req.session.userId]
     }
-
-    console.log(templateVars);
 
     res.render('urls_show', templateVars);
   } else {
@@ -205,7 +210,7 @@ app.get('/urls/:id', (req, res) => {
 });
 
 app.delete('/urls/:id/delete', (req, res) => {
-  if(urlDatabase[req.params.id].userId === req.cookies['user_id']) {
+  if(urlDatabase[req.params.id].userId === req.session.userId) {
     delete urlDatabase[req.params.id];
   }
   res.redirect('/urls');
