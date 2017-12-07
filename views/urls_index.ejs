@@ -3,30 +3,35 @@
 
 <head>
   <% include ./partials/_head %>
-  <style>
-  </style>
 </head>
 
 <body>
   <% include ./partials/_header %>
-  <div>
-    <h2>Shortened URLs</h2>
-      <% if(user) {
-        urls.forEach( function(url) {
-          console.log(urls) %>
-        <form action='/urls/<%= url.shortUrl %>/delete?_method=DELETE' method='POST' value="Delete">
-          <div id='form'>
-            <a><%= url.shortUrl %> --> <%= url.longUrl %></a>
-            <a href='/urls/<%= url.shortUrl %>'>Edit</a>
-            <input type='submit' value='Delete'>
-          </div>
-        </form>
-      <% });
-      } else { %>
-        <h2>Please Login!</h2>
-      <% } %>
-    <a href='/urls/new'><p>Shorten URL</p></a>
-  </div>
+  <h2 class='text-center'>Shortened URLs</h2>
+  <% if(user) {
+    urls.forEach( function(url) { %>
+    <div class='container'>
+      <div class='row'>
+        <ul class='list-group'>
+          <li class='list-group-item'>
+            <div class='col-sm-6 text-right'>
+              <form action='/urls/<%= url.shortUrl %>/delete?_method=DELETE' method='POST' value="Delete">
+                <a><%= url.shortUrl %> --> <%= url.longUrl %></a>
+            </div>
+            <div class='col-sm-6'>
+                <a class='text-center' href='/urls/<%= url.shortUrl %>'>Edit</a>
+                <input class='btn btn-danger' type='submit' value='Delete'>
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  <% });
+  } else { %>
+  <h2>Please Login!</h2>
+  <% } %>
+  <a href='/urls/new' class='text-center'>Shorten URL</a>
 </body>
 
 </html>

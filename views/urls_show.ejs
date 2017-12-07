@@ -14,11 +14,12 @@
       <li><%= shortUrl %> --> <%= url.longUrl %></li>
       <form action='/urls/<%= shortUrl %>?_method=PUT' method='POST'>
         <label for:"longURL">Enter an updated URL:</label>
-        <input id='longURL' type='text' name='longURL' value='<%= url.longUrl %>' style='width: 300px'>
-        <input type='submit' value='Update'>
+        <input id='longURL' type='text' name='longURL' value='<%= url.longUrl %>'>
+        <input class='btn-primary' type='submit' value='Update'>
       </form>
     <% } else { %>
-      <h2>You don't have permission to edit this URL</h2>
+      <div class='text-center alert alert-info'>
+        <h2><strong>Login!</strong> You don't have permission to edit this URL</h2>
     <% } %>
       <a href="/urls"><p>Go Back to URLs</p></a>
   </div>

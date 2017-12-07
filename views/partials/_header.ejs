@@ -1,6 +1,8 @@
 <div class="jumbotron">
-  <h1>TinyApp</h1>
-  <a href='/login'><% if(user) { %>Logout<% } else { %>Login<% } %></a>
-  <a href='/register'>Register</a>
-  <a> <% if(user) { %> <%=user.email%> <% } %> </a>
+  <a>TinyApp</a>
+  <div class='text-right'>
+    <span class='icon-bar'></span><a> <% if(user) { %> <%=user.email%> <% } %> </a>
+    <a href='/login' class='btn btn-default' role='button'><% if(user) { %>Logout<% } else { %>Login<% } %></a>
+    <a href='/register' class='btn btn-default' role='button'>Register</a>
+  </div>
 </div>
