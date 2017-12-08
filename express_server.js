@@ -136,12 +136,14 @@ app.post('/urls', (req, res) => {
 
   urlDatabase[shortUrl] = { userId, shortUrl, longUrl };
 
-  res.redirect(303, '/urls');   // Redirect to the generated short url after a form submission /${shortUrl}`
+  res.redirect(303, '/urls');   // Redirect to the generated short url after a form submission (${shortUrl} previous redirect)
 });
 
 /* ---------------- REGISTER ------------------ */
 app.get('/register', (req, res) => {
-  let templateVars = { user: req.session.userid, failed: false};
+  let templateVars = { user: req.session.userId, failed: false};
+  console.log(req.session.userId)
+  console.log(templateVars)
 
   if(templateVars.user) {
     res.redirect('/urls');      // If logged in then
@@ -255,12 +257,9 @@ app.put('/urls/:id', (req, res) => {
 
   if(urlDatabase[id].userId === userId) {
     urlDatabase[id].longUrl = longUrl;
-
-    res.redirect(`/urls/${id}`);   // Redirect to the updated short url after a form submission
-  } else {
-    res.redirect('/urls');   // If they do not have permission to edit the URL then redirect to URLS
   }
 
+  res.redirect('/urls');   // Redirect to the urls page regardless of whether they have permission or not
 });
 
 app.get('/urls/:id', (req, res) => {
