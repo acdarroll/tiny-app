@@ -11,8 +11,8 @@
   <div class='container text-center'>
     <h2>Shortened URL</h2>
     <% if(user && url && url.userId === user.id) { %>
-      <div class='text-center alert alert-success'>
-        <h4><%= shortUrl %> &#8594; <%= url.longUrl %></h4>
+      <div class='alert alert-success'>
+        <h4><%= shortUrl %> &rarr; <%= url.longUrl %></h4>
       </div>
       <form class='form-horizontal' action='/urls/<%= shortUrl %>?_method=PUT' method='POST'>
         <div class='form-group'>
