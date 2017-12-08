@@ -10,16 +10,16 @@
 
   <div class='container text-center'>
     <h2>Shortened URL</h2>
-    <% if(user && url.userId === user.id && url) { %>
+    <% if(user && url && url.userId === user.id) { %>
       <div class='text-center alert alert-success'>
         <h4><%= shortUrl %> &#8594; <%= url.longUrl %></h4>
       </div>
       <form class='form-horizontal' action='/urls/<%= shortUrl %>?_method=PUT' method='POST'>
         <div class='form-group'>
-          <label class='control-label' for='longURL'>Enter an updated URL:</label>
+          <label class='control-label' for='longUrl'>Enter an updated URL:</label>
         </div>
         <div class='form-group'>
-          <input class='form-control' id='longURL' type='text' name='longURL' value='<%= url.longUrl %>'>
+          <input class='form-control' id='longUrl' type='text' name='longUrl' value='<%= url.longUrl %>'>
         </div>
         <div class='form-group'>
           <input class='btn btn-primary' type='submit' value='Update'>
@@ -38,7 +38,7 @@
         <h2><strong>Login!</strong> Please Login to View This Page</h2>
       </div>
     <% } %>
-    <a href="/urls"><p>Go Back to URLs</p></a>
+    <h4><a href="/urls">Go Back to URLs</a></h4>
   </div>
 
   <% include ./partials/_footer %>

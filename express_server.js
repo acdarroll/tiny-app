@@ -250,7 +250,8 @@ app.get('/u', (req, res) => {
 /* ----------------- SHORT URLS ------------------- */
 app.put('/urls/:id', (req, res) => {
   const { id } = req.params;
-  const { userId, longUrl } = req.session;
+  const { longUrl } = req.body;
+  const { userId } = req.session;
 
   if(urlDatabase[id].userId === userId) {
     urlDatabase[id].longUrl = longUrl;
