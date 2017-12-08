@@ -3,14 +3,15 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
+const dotenv = require('dotenv').config();
 let app = express();
 
-
+let token = process.env.cookie_token;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(cookieSession( {
   name: 'session',
-  secret: 'random string',
+  secret: token,
   maxAge: 1000 * 60 * 60
 }));
 
