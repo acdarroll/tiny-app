@@ -162,8 +162,14 @@ app.get('/urls/new', (req, res) => {
 /*  LOGIN AND LOGOUT  */
 app.get('/login', (req, res) => {
   let templateVars = {
-    user: users[req.session.userId]
+    user: users[req.session.userId],
+    failed: false
   }
+  if(req.session.failed) {
+    templateVars.failed = true;
+    req.session = null;
+  }
+
   if(templateVars.user) {
     res.redirect('/urls');
   }
@@ -178,7 +184,8 @@ app.post('/login', (req, res) => {
         req.session.userId = users[user].id;
         res.redirect('/urls');
       } else {
-        res.sendStatus(403).send("Wrong password");
+        req.session.failed = true;
+        res.redirect('/login');
       }
     }
   }
