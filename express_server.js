@@ -82,6 +82,7 @@ let findUser = function(email) {
 };
 
 // Attempt to register a user and return false if the email exists or the email/password string is empty
+// Return the user object if succesful
 let registerUser = function(email, password) {
   let conflict = null;
   for(let user in users) {
@@ -120,7 +121,7 @@ app.get('/urls', (req, res) => {
   }
 
   if(userId) {
-    userUrls = urlsForUser(userId);
+    userUrls = urlsForUser(userId);   // If a user is logged in then collect their URLs to display
     templateVars.urls = userUrls;
   }
 
@@ -140,9 +141,9 @@ app.post('/urls', (req, res) => {
 /* ---------------- REGISTER ------------------ */
 app.get('/register', (req, res) => {
   let templateVars = { user: req.session.userid, failed: false};
-  console.log("in get:", req.session)
+
   if(templateVars.user) {
-    res.redirect('/urls');
+    res.redirect('/urls');      // If logged in then
   } else if(req.session.registerFailed) {
     templateVars.failed = true;
     req.session = null;
@@ -155,7 +156,7 @@ app.post('/register', (req, res) => {
   const { email, password } = req.body;
   let user = registerUser(email, password);
 
-  if(user) {
+  if(user) {      // If generating a new user was successful then add them
     let id = generateRandomString();
     users[id] = {
       id,
@@ -167,7 +168,6 @@ app.post('/register', (req, res) => {
     res.redirect('/urls');
   } else {
     req.session.registerFailed = true;
-    console.log("in post:", req.session)
     res.redirect('/register');
   }
 });
