@@ -7,6 +7,7 @@
 
 <body>
   <% include ./partials/_header %>
+
   <div>
     <div class='container text-center'>
       <% if(failed) { %>
@@ -18,14 +19,11 @@
           <h2> Try Using a Short Url to Redirect</h2>
         </div>
       <% } %>
-      <a href="/urls"><p>Go Back to URLs</p></a>
+      <h4><a href="/urls">Go Back to URLs</a></h4>
     </div>
   </div>
-  <footer class='footer'>
-    <div class='navbar navbar-fixed-bottom bg-primary'>
-      <% include ./partials/_footer %>
-    </div>
-  </footer>
+
+  <% include ./partials/_footer %>
 </body>
 
 </html>

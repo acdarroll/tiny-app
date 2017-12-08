@@ -7,6 +7,7 @@
 
 <body>
   <% include ./partials/_header %>
+
   <div class='container text-center'>
     <h2>Shortened URL</h2>
     <% if(user && url.userId === user.id && url) { %>
@@ -39,11 +40,8 @@
     <% } %>
     <a href="/urls"><p>Go Back to URLs</p></a>
   </div>
-  <footer class='footer'>
-    <div class='navbar navbar-fixed-bottom bg-primary'>
-      <% include ./partials/_footer %>
-    </div>
-  </footer>
+
+  <% include ./partials/_footer %>
 </body>
 
 </html>

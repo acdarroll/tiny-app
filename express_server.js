@@ -148,7 +148,7 @@ app.get('/register', (req, res) => {
     templateVars.failed = true;
     req.session = null;
   }
-  console.log("after:", req.session)
+
   res.render('urls_register', templateVars);
 });
 
@@ -248,12 +248,15 @@ app.get('/u', (req, res) => {
 
 /* ----------------- SHORT URLS ------------------- */
 app.put('/urls/:id', (req, res) => {
-  if(urlDatabase[req.params.id].userId === req.session.userId) {
-    urlDatabase[req.params.id].longUrl = req.body.longURL;
+  const { id } = req.params;
+  const { userId, longUrl } = req.session;
 
-  res.redirect(`/urls/${req.params.id}`);   // Redirect to the generated short url after a form submission
+  if(urlDatabase[id].userId === userId) {
+    urlDatabase[id].longUrl = longUrl;
+
+    res.redirect(`/urls/${id}`);   // Redirect to the updated short url after a form submission
   } else {
-    res.redirect('/urls');
+    res.redirect('/urls');   // If they do not have permission to edit the URL then redirect to URLS
   }
 
 });
@@ -267,14 +270,12 @@ app.get('/urls/:id', (req, res) => {
   }
 
   res.render('urls_show', templateVars);
-  // } else {
-  //   res.sendStatus(404).end();    // Send a 404 response when the short url is not in the database
-  // }
 });
 
 app.delete('/urls/:id/delete', (req, res) => {
-  if(urlDatabase[req.params.id].userId === req.session.userId) {
-    delete urlDatabase[req.params.id];
+  const { id } = req.params;
+  if(urlDatabase[id].userId === req.session.userId) {
+    delete urlDatabase[id];
   }
   res.redirect('/urls');
 });

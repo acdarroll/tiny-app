@@ -1,20 +1,22 @@
-<div class='jumbotron'>
-  <div class='container'>
-    <div class='pull-left align-bottom'>
-      <h1>TinyApp <small><small>Create short URLs</small></small></h1>
-    </div>
-    <div class='pull-right align-bottom'>
-      <% if(user) { %>
-        <form class='form-inline' action='/logout' method='POST'>
-          <a><%=user.email%></a>
-          <div class='form-group'>
-            <input class='btn btn-default' type='submit' value='Logout'>
-          </div>
-        </form>
-      <% } else { %>
-        <a href='/login' class='btn btn-default' role='button'>Login</a>
-        <a href='/register' class='btn btn-default' role='button'>Register</a>
-      <% } %> </a>
+<header>
+  <div class='jumbotron'>
+    <div class='container'>
+      <div class='pull-left align-bottom'>
+        <h1>TinyApp <small><small>Create short URLs</small></small></h1>
+      </div>
+      <div class='pull-right align-bottom'>
+        <% if(user) { %>
+          <form class='form-inline' action='/logout' method='POST'>
+            <a><%=user.email%></a>
+            <div class='form-group'>
+              <input class='btn btn-default' type='submit' value='Logout'>
+            </div>
+          </form>
+        <% } else { %>
+          <a href='/login' class='btn btn-default' role='button'>Login</a>
+          <a href='/register' class='btn btn-default' role='button'>Register</a>
+        <% } %> </a>
+      </div>
     </div>
   </div>
-</div>
+</header>

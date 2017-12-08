@@ -7,6 +7,7 @@
 
 <body>
   <% include partials/_header %>
+
   <div class='container text-center'>
     <form class='form-horizontal' action='/urls' method='POST'>
       <div class='form-group'>
@@ -20,11 +21,8 @@
       </div>
     </form>
   </div>
-  <footer class='footer'>
-    <div class='navbar navbar-fixed-bottom bg-primary'>
-      <% include ./partials/_footer %>
-    </div>
-  </footer>
+
+  <% include ./partials/_footer %>
 </body>
 
 </html>

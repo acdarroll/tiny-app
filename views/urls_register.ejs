@@ -7,6 +7,7 @@
 
 <body>
   <% include partials/_header %>
+
   <div class='container text-center'>
     <h2>Register</h2>
     <form class='form-horizontal' action='/register' method='POST'>
@@ -24,15 +25,12 @@
     </form>
     <% if(failed) { %>
       <div class='text-center alert alert-danger'>
-        <h5> Wrong Username or Password, Please Try Again.</h5>
+        <h5> Username Taken or There Was an Empty Field.</h5>
       </div>
     <% } %>
   </div>
-  <footer class='footer'>
-    <div class='navbar navbar-fixed-bottom bg-primary'>
-      <% include ./partials/_footer %>
-    </div>
-  </footer>
+
+  <% include ./partials/_footer %>
 </body>
 
 </html>
