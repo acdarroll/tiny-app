@@ -10,10 +10,10 @@
 
   <div class='container text-center'>
     <h2>Shortened URL</h2>
+    <div class='alert alert-success'>
+      <h4><%= shortUrl %> &rarr; <%= url.longUrl %></h4>
+    </div>
     <% if(user && url && url.userId === user.id) { %>
-      <div class='alert alert-success'>
-        <h4><%= shortUrl %> &rarr; <%= url.longUrl %></h4>
-      </div>
       <form class='form-horizontal' action='/urls/<%= shortUrl %>?_method=PUT' method='POST'>
         <div class='form-group'>
           <label class='control-label' for='longUrl'>Enter an updated URL:</label>
@@ -35,9 +35,10 @@
       </div>
     <% } else { %>
       <div class='text-center alert alert-info'>
-        <h2><strong>Login!</strong> Please Login to View This Page</h2>
+        <h2><strong>Login!</strong> Please Login to Edit This Url</h2>
       </div>
     <% } %>
+    <p>Num Visits: <%= url.visits %></p>
     <h4><a href="/urls">Go Back to URLs</a></h4>
   </div>
 

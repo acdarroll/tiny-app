@@ -43,12 +43,14 @@ const urlDatabase = {
   'b2xVn2': {
     userId: 'h2h',
     shortUrl: 'b2xVn2',
-    longUrl: 'http://www.lighthouselabs.ca'
+    longUrl: 'http://www.lighthouselabs.ca',
+    visits: 3,
   },
   '9sm5xK': {
     userId: 'brb',
     shortUrl: '9sm5xK',
-    longUrl: 'http://www.google.com'
+    longUrl: 'http://www.google.com',
+    visits: 10
   }
 };
 
@@ -227,6 +229,7 @@ app.put('/logout', (req, res) => {
 app.get('/u/:id', (req, res) => {
   const { id } = req.params;
   if (urlDatabase[id]) {
+    urlDatabase[id].visits += 1;
     res.redirect(307, urlDatabase[id].longUrl);  // Redirect to the longurl if the short URL exists
   } else {
     req.session.failed = true;
