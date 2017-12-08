@@ -11,7 +11,7 @@
   <div class='container text-center'>
     <% if(!user) { %>
       <h2>Login</h2>
-      <form class='form-horizontal' action='/login' method='POST'>
+      <form class='form-horizontal' action='/login?_method=PUT' method='POST'>
         <div class='form-group'>
           <label class='control-label' for='email'>Email:</label>
           <input class='form-control' id='email' type="email" name="email" placeholder="Enter email">
@@ -31,7 +31,7 @@
       <% } %>
     <% } else { %>
      <h2>Logout</h2>
-      <form class='form-horizontal' action='/logout' method='POST'>
+      <form class='form-horizontal' action='/logout?_method=PUT' method='POST'>
         <div class='form-group'>
           <input class='btn btn-primary' type='submit' value='Logout'>
         </div>

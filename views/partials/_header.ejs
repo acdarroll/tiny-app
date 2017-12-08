@@ -6,7 +6,7 @@
       </div>
       <div class='pull-right align-bottom'>
         <% if(user) { %>
-          <form class='form-inline' action='/logout' method='POST'>
+          <form class='form-inline' action='/logout?_method=PUT' method='POST'>
             <a><%=user.email%></a>
             <div class='form-group'>
               <input class='btn btn-default' type='submit' value='Logout'>

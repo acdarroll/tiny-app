@@ -142,17 +142,16 @@ app.post('/urls', (req, res) => {
 /* ---------------- REGISTER ------------------ */
 app.get('/register', (req, res) => {
   let templateVars = { user: req.session.userId, failed: false};
-  console.log(req.session.userId)
-  console.log(templateVars)
 
   if(templateVars.user) {
     res.redirect('/urls');      // If logged in then
-  } else if(req.session.registerFailed) {
-    templateVars.failed = true;
-    req.session = null;
+  } else {
+    if(req.session.registerFailed) {
+      templateVars.failed = true;
+      req.session = null;
+    }
+    res.render('urls_register', templateVars);
   }
-
-  res.render('urls_register', templateVars);
 });
 
 app.post('/register', (req, res) => {
@@ -206,7 +205,7 @@ app.get('/login', (req, res) => {
   res.render('urls_login', templateVars);
 });
 
-app.post('/login', (req, res) => {
+app.put('/login', (req, res) => {
   const { email, password } = req.body;
   const user = findUser(email);
 
@@ -219,7 +218,7 @@ app.post('/login', (req, res) => {
   }
 });
 
-app.post('/logout', (req, res) => {
+app.put('/logout', (req, res) => {
   req.session = null;
   res.redirect('/urls');
 });
