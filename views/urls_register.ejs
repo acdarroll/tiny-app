@@ -11,7 +11,7 @@
       <form class='form-horizontal' action='/register' method='POST'>
         <div class='form-group'>
           <label class='control-label' for='email'>Email:</label>
-            <input class='form-control' id='email' type="email" name="email" placeholder="Enter email">
+          <input class='form-control' id='email' type="email" name="email" placeholder="Enter email">
         </div>
         <div class='form-group'>
           <label class='control-label' for='pwd'>Password:</label>
@@ -20,8 +20,13 @@
         <div class='form-group'>
           <input class='btn btn-primary' type="submit" value="Register">
         </div>
-    <form action="/register" method="POST">
-    </form>
+      </form>
+      <% if(failed) { %>
+        <div class='text-center alert alert-danger'>
+          <h5> Wrong Username or Password, Please Try Again.</h5>
+        </div>
+      <% } %>
+    </div>
   </body>
 
 </html>
