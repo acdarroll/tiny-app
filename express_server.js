@@ -135,7 +135,7 @@ app.post('/urls', (req, res) => {
 
   urlDatabase[shortUrl] = { userId, shortUrl, longUrl };
 
-  res.redirect(303, `/urls/${shortUrl}`);   // Redirect to the generated short url after a form submission
+  res.redirect(303, '/urls');   // Redirect to the generated short url after a form submission /${shortUrl}`
 });
 
 /* ---------------- REGISTER ------------------ */
@@ -225,14 +225,25 @@ app.post('/logout', (req, res) => {
 app.get('/u/:id', (req, res) => {
   const { id } = req.params;
   if (urlDatabase[id]) {
-    res.redirect(307, urlDatabase[id].longUrl);  // Redirect to the longurl
+    res.redirect(307, urlDatabase[id].longUrl);  // Redirect to the longurl if the short URL exists
   } else {
-    let templateVars = {
-      user: users[req.session.userId]
-    }
+    req.session.failed = true;
 
-    res.render('urls_redirect', templateVars);   // Redirect to failed message, URL isn't in database
+    res.redirect('/u');   // Redirect to a /u page displaying an error if the short URL is not in the database
   }
+});
+
+app.get('/u', (req, res) => {
+  let templateVars = {
+    user: users[req.session.userId],
+    failed: false
+  }
+  if(req.session.failed) {
+    templateVars.failed = true;
+    req.session.failed = null;
+  }
+
+  res.render('urls_redirect', templateVars);   // Redirect to failed message, URL isn't in database
 });
 
 /* ----------------- SHORT URLS ------------------- */

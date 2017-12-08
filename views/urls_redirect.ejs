@@ -9,9 +9,15 @@
   <% include ./partials/_header %>
   <div>
     <div class='container text-center'>
-      <div class='alert alert-danger'>
-        <h2><strong>Missing!</strong> We Do Not Have That URL in Our Database</h2>
-      </div>
+      <% if(failed) { %>
+        <div class='alert alert-danger'>
+          <h2><strong>Missing!</strong> We Do Not Have That URL in Our Database</h2>
+        </div>
+      <% } else { %>
+        <div class='alert alert-info'>
+          <h2> Try Using a Short Url to Redirect</h2>
+        </div>
+      <% } %>
       <a href="/urls"><p>Go Back to URLs</p></a>
     </div>
   </div>
