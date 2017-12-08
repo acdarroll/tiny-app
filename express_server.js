@@ -24,7 +24,7 @@ const users = {
   "h2h": {
     id: "h2h",
     email: "user@example.com",
-    password: bcrypt.hashSync('purple-monkey-dinosaur', saltRounds)
+    password: bcrypt.hashSync('never', saltRounds)
   },
   "lhl": {
     id: "lhl",
@@ -34,7 +34,7 @@ const users = {
  "brb": {
     id: "brb",
     email: "user2@example.com",
-    password: bcrypt.hashSync('dishwasher-funk', saltRounds)
+    password: bcrypt.hashSync('never', saltRounds)
   }
 }
 
@@ -117,6 +117,9 @@ app.get('/register', (req, res) => {
   let templateVars = {
     user: users[req.session.userId]
   }
+  if(templateVars.user) {
+    res.redirect('/urls')
+  }
   res.render('urls_register', templateVars);
 });
 
@@ -161,6 +164,9 @@ app.get('/login', (req, res) => {
   let templateVars = {
     user: users[req.session.userId]
   }
+  if(templateVars.user) {
+    res.redirect('/urls');
+  }
 
   res.render('urls_login', templateVars);
 });
@@ -189,7 +195,11 @@ app.get('/u/:id', (req, res) => {
   if (urlDatabase.hasOwnProperty(req.params.id)) {
     res.redirect(307, urlDatabase[req.params.id].longUrl);  // Redirect to the longurl of the short url
   } else {
-    res.redirect(307, '/urls/new');   // Redirect to the form submission if the short url does not exist
+    let templateVars = {
+      user: users[req.session.userId]
+    }
+
+    res.render('urls_redirect', templateVars);   // Redirect to the form submission if the short url does not exist
   }
 });
 
