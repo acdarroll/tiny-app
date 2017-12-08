@@ -13,7 +13,7 @@
     "body-parser": "^1.18.2",
     "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^4.0.0",
-    "ejs": "^1.0.0",
+    "ejs": "^2.5.5",
     "express": "^4.16.2",
     "method-override": "^2.3.10"
   },
