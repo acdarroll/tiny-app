@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <% include ./partials/_head %>
-  </head>
 
-  <body>
-    <% include partials/_header %>
-    <div class='container text-center'>
-      <form class='form-horizontal' action='/urls' method='POST'>
-        <div class='form-group'>
-          <label class='control-label' for='longUrl'>Enter a URL:</label>
-        </div>
-        <div class='form-group'>
-          <input class='form-control' id='longUrl' type='text' name='longUrl' placeholder='http://'>
-        </div>
-        <div class='form-group'>
-          <input class='btn btn-primary' type='submit' value='Submit'>
-        </div>
-      </form>
+<head>
+  <% include ./partials/_head %>
+</head>
+
+<body>
+  <% include partials/_header %>
+  <div class='container text-center'>
+    <form class='form-horizontal' action='/urls' method='POST'>
+      <div class='form-group'>
+        <label class='control-label' for='longUrl'>Enter a URL:</label>
+      </div>
+      <div class='form-group'>
+        <input class='form-control' id='longUrl' type='text' name='longUrl' placeholder='http://'>
+      </div>
+      <div class='form-group'>
+        <input class='btn btn-primary' type='submit' value='Submit'>
+      </div>
+    </form>
+  </div>
+  <footer class='footer'>
+    <div class='navbar navbar-fixed-bottom bg-primary'>
+      <% include ./partials/_footer %>
     </div>
-  </body>
+  </footer>
+</body>
 
 </html>

@@ -13,7 +13,9 @@
 </head>
 
 <body>
-  <% include ./partials/_header %>
+  <header class='header'>
+    <% include ./partials/_header %>
+  </header>
   <div class='container text-center'>
     <h2 class='text-center'>Your Shortened URLs:</h2>
     <div class='row'>
@@ -46,9 +48,14 @@
     </div>
   </div>
   <% } %>
-    <div class='container text-center'>
-      <a href='/urls/new' class='text-center'>Create a New Short Link</a>
+  <div class='container text-center'>
+    <h4><a href='/urls/new' class='text-center'>Create a New Short Link</a></h4>
+  </div>
+  <footer class='footer'>
+    <div class='navbar navbar-fixed-bottom bg-primary'>
+      <% include ./partials/_footer %>
     </div>
+  </footer>
 </body>
 
 </html>

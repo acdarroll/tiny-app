@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <% include ./partials/_head %>
-  </head>
 
-  <body>
-    <% include partials/_header %>
-    <div class='container text-center'>
-      <h2>Register</h2>
-      <form class='form-horizontal' action='/register' method='POST'>
-        <div class='form-group'>
-          <label class='control-label' for='email'>Email:</label>
-          <input class='form-control' id='email' type="email" name="email" placeholder="Enter email">
-        </div>
-        <div class='form-group'>
-          <label class='control-label' for='pwd'>Password:</label>
-          <input class='form-control' id='pwd' type="password" name="password" placeholder="password">
-        </div>
-        <div class='form-group'>
-          <input class='btn btn-primary' type="submit" value="Register">
-        </div>
-      </form>
-      <% if(failed) { %>
-        <div class='text-center alert alert-danger'>
-          <h5> Wrong Username or Password, Please Try Again.</h5>
-        </div>
-      <% } %>
+<head>
+  <% include ./partials/_head %>
+</head>
+
+<body>
+  <% include partials/_header %>
+  <div class='container text-center'>
+    <h2>Register</h2>
+    <form class='form-horizontal' action='/register' method='POST'>
+      <div class='form-group'>
+        <label class='control-label' for='email'>Email:</label>
+        <input class='form-control' id='email' type="email" name="email" placeholder="Enter email">
+      </div>
+      <div class='form-group'>
+        <label class='control-label' for='pwd'>Password:</label>
+        <input class='form-control' id='pwd' type="password" name="password" placeholder="password">
+      </div>
+      <div class='form-group'>
+        <input class='btn btn-primary' type="submit" value="Register">
+      </div>
+    </form>
+    <% if(failed) { %>
+      <div class='text-center alert alert-danger'>
+        <h5> Wrong Username or Password, Please Try Again.</h5>
+      </div>
+    <% } %>
+  </div>
+  <footer class='footer'>
+    <div class='navbar navbar-fixed-bottom bg-primary'>
+      <% include ./partials/_footer %>
     </div>
-  </body>
+  </footer>
+</body>
 
 </html>
