@@ -4,9 +4,9 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["URLs page when not logged in"](https://github.com/acdarroll/tiny-app/blob/master/docs/urls-page-unlogged.png?raw=true)
-!["URLs page while logged in"](https://github.com/acdarroll/tiny-app/blob/master/docs/urls-page-logged.png?raw=true)
-!["Short URLs page for updating a short URLs link"](https://github.com/acdarroll/tiny-app/blob/master/docs/short-url-page.png?raw=true)
+!["URLs page when not logged in"](https://github.com/acdarroll/tiny-app/blob/5b6540e0e3b05e8f860d24fa9716719777497ca5/docs/urls-page-logged-out.png?raw=true)
+!["URLs page while logged in"](https://github.com/acdarroll/tiny-app/blob/5b6540e0e3b05e8f860d24fa9716719777497ca5/docs/urls-page-logged-out.png?raw=true)
+!["Short URLs page for updating a short URLs link"](https://github.com/acdarroll/tiny-app/blob/5b6540e0e3b05e8f860d24fa9716719777497ca5/docs/short-url-edit-page.png?raw=true)
 
 ## Dependencies
 
