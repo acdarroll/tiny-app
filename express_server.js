@@ -15,11 +15,9 @@ app.use(cookieSession( {
   maxAge: 1000 * 60 * 60
 }));
 
-
 app.set('view engine', 'ejs');
 var PORT = process.env.PORT || 8080; // default port 8080
 const saltRounds = 10;
-
 
 const users = {
   "h2h": {
@@ -36,7 +34,8 @@ const users = {
     id: "brb",
     email: "user2@example.com",
     password: bcrypt.hashSync('never', saltRounds)
-  }
+  },
+  "visitors": []
 };
 
 const urlDatabase = {
@@ -45,12 +44,16 @@ const urlDatabase = {
     shortUrl: 'b2xVn2',
     longUrl: 'http://www.lighthouselabs.ca',
     visits: 3,
+    visitors: ['lhl', 'brb'],
+    history: []
   },
   '9sm5xK': {
     userId: 'brb',
     shortUrl: '9sm5xK',
     longUrl: 'http://www.google.com',
-    visits: 10
+    visits: 10,
+    visitors: ['h2h'],
+    history: []
   }
 };
 
@@ -104,6 +107,19 @@ let registerUser = function(email, password) {
   }
 };
 
+let uniqueVisitor = function(shortUrl, userId) {
+  if(urlDatabase[shortUrl].visitors.indexOf(userId) > -1) {
+    return false;
+  } else {
+  return true;
+  }
+};
+
+let addVisitData = function(shortUrl, userId) {
+  let date = new Date();
+  urlDatabase[shortUrl].history.push([date, userId]);
+};
+
 /* --------------- INDEX PAGE -------------- */
 app.get('/', (req, res) => {
   const { userId } = req.session;
@@ -136,7 +152,7 @@ app.post('/urls', (req, res) => {
   const { longUrl } = req.body;
   let shortUrl = generateRandomString();
 
-  urlDatabase[shortUrl] = { userId, shortUrl, longUrl };
+  urlDatabase[shortUrl] = { userId, shortUrl, longUrl, visits: 0, visitors: [], history: [] };
 
   res.redirect(303, '/urls');   // Redirect to the generated short url after a form submission (${shortUrl} previous redirect)
 });
@@ -228,8 +244,18 @@ app.put('/logout', (req, res) => {
 /* ------------- REDIRECT TO LONGURL -------------- */
 app.get('/u/:id', (req, res) => {
   const { id } = req.params;
+  let { userId } = req.session;
+
   if (urlDatabase[id]) {
     urlDatabase[id].visits += 1;
+    if(!userId) {
+      userId = generateRandomString();
+      req.session.userId = userId;
+    }
+    addVisitData(id, userId);
+    if(uniqueVisitor(id, userId)) {
+      urlDatabase[id].visitors.push(userId);
+    }
     res.redirect(307, urlDatabase[id].longUrl);  // Redirect to the longurl if the short URL exists
   } else {
     req.session.failed = true;
