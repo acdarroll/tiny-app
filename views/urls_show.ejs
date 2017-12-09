@@ -10,16 +10,55 @@
 
   <div class='container text-center'>
     <h2>Shortened URL</h2>
-    <div class='alert alert-success'>
-      <h4><%= shortUrl %> &rarr; <%= url.longUrl %></h4>
+    <% if(url) { %>
+    <div class='list-group'>
+      <div class='list-group-item'>
+        <h4><a href='/u/<%= shortUrl %>'><%= shortUrl %></a> &rarr; <%= url.longUrl %></h4>
+      </div>
     </div>
+    <% } %>
     <% if(user && url && url.userId === user.id) { %>
-      <form class='form-horizontal' action='/urls/<%= shortUrl %>?_method=PUT' method='POST'>
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapse1">URL Analytics</a>
+          </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div class='row'>
+                <div class='col-sm-6'>
+                  <p><strong>Total Visits:</strong></p>
+                  <p><%= url.visits %></p>
+                </div>
+                <div class='col-sm-6'>
+                   <p><strong>Unique Visits:</strong></p>
+                   <p><%= url.visitors.length %></p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class='row'>
+                <div class='col-sm-12'>
+                  <p>Visit History:</p>
+                  <% url.history.forEach( function(visit) { %>
+                  <p><strong>Visitor Id: </strong><%= visit[1] %> &rarr; <strong>Date: </strong><%= visit[0] %></p>
+                  <% }); %>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+      <form class='form-inline' action='/urls/<%= shortUrl %>?_method=PUT' method='POST'>
         <div class='form-group'>
           <label class='control-label' for='longUrl'>Enter an updated URL:</label>
         </div>
         <div class='form-group'>
-          <input class='form-control' id='longUrl' type='text' name='longUrl' value='<%= url.longUrl %>'>
+          <input class='form-control' id='longUrl' type='text' name='longUrl' value='<%= url.longUrl %>' style='width: 400px'>
         </div>
         <div class='form-group'>
           <input class='btn btn-primary' type='submit' value='Update'>
@@ -27,54 +66,17 @@
       </form>
     <% } else if (!url) { %>
       <div class='text-center alert alert-danger'>
-        <h2><strong>Missing!</strong> This Short URL Does Not Exist.</h2>
+        <h5><strong>Error!</strong> Could Not Find the URL.</h5>
       </div>
-    <% } else if (!user || url.userId !== user.id) { %>
+    <% } else if (!user) { %>
       <div class='text-center alert alert-danger'>
-        <h2>You Do Not Have Permission to Edit This URL.</h2>
+        <h5><strong>Error!</strong> Please Login to Edit This URL.</h5>
       </div>
-    <% } else { %>
+    <% } else if(url.userId !== user.id){ %>
       <div class='text-center alert alert-info'>
-        <h2><strong>Login!</strong> Please Login to Edit This Url</h2>
+        <h5><strong>Error!</strong> Insufficient Permissions to Edit This URL.</h5>
       </div>
     <% } %>
-
-<div class="panel-group">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" href="#collapse1">URL Analytics</a>
-      </h4>
-    </div>
-    <div id="collapse1" class="panel-collapse collapse">
-      <ul class="list-group">
-        <li class="list-group-item">
-          <div class='row'>
-            <div class='col-sm-6'>
-              <p>Num Visits:</p>
-              <p><%= url.visits %></p>
-            </div>
-            <div class='col-sm-6'>
-               <p>Unique Visits:</p>
-               <p><%= url.visitors.length %></p>
-            </div>
-          </div>
-        </li>
-        <li class="list-group-item">
-          <div class='row'>
-            <div class='col-sm-12'>
-              <p>Visit History:</p>
-              <% url.history.forEach( function(visit) { %>
-              <p>Date: <%= visit[0] %>  |  Visitor Id: <%= visit[1] %></p>
-              <% }); %>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
-
     <h4><a href="/urls">Go Back to URLs</a></h4>
   </div>
 

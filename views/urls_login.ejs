@@ -11,22 +11,24 @@
   <div class='container text-center'>
     <% if(!user) { %>
       <h2>Login</h2>
-      <form class='form-horizontal' action='/login?_method=PUT' method='POST'>
+      <form class='form-inline' action='/login?_method=PUT' method='POST'>
         <div class='form-group'>
           <label class='control-label' for='email'>Email:</label>
           <input class='form-control' id='email' type="email" name="email" placeholder="Enter email">
         </div>
-        <div class='form-group'>
+        <div class='form-group' style='padding-left: 20px'>
           <label class='control-label' for='pwd'>Password:</label>
           <input class='form-control' id='pwd' type="password" name="password" placeholder="password">
         </div>
-        <div class='form-group'>
-          <input class='btn btn-primary' type='submit' value='Login'>
+        <div class='form-group' style='padding-left: 20px'>
+          <input class='btn btn-primary' type='submit' value='Login' >
         </div>
       </form>
       <% if(failed) { %>
-        <div class='text-center alert alert-danger'>
-          <h5> Wrong Username or Password, Please Try Again.</h5>
+        <div class='container text-center' style='padding-top: 20px'>
+          <div class='alert alert-danger'>
+            <h5> Wrong Username or Password, Please Try Again.</h5>
+          </div>
         </div>
       <% } %>
     <% } else { %>
