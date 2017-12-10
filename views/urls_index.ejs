@@ -1,54 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 
 <head>
   <% include ./partials/_head %>
-  <style type="text/css">
-    li div {
-      display: inline-block;
-      padding-left: 10px;
-      padding-right: 10px;
-      margin: 0px;
-    }
-  </style>
 </head>
 
 <body>
   <% include ./partials/_header %>
 
-  <div class='container text-center'>
-    <h2 class='text-center'>Your Shortened URLs:</h2>
-      <ul class='list-group'>
-      <% if(user) {
-        urls.forEach( function(url) { %>
-          <li class='list-group-item'>
-            <div>
-              <h4><a href='/u/<%= url.shortUrl %>'><%= url.shortUrl %></a></h4>
-            </div><div>
-              <h4>&rarr;</h4>
-            </div><div>
-              <h4><%= url.longUrl %></h4>
-            </div><div>
-              <a href='/urls/<%= url.shortUrl %>'><h4>Edit</h4></a>
-            </div><div>
-              <form action='/urls/<%= url.shortUrl %>/delete?_method=DELETE' method='POST' value="Delete">
-                <input class='btn btn-danger' type='submit' value='Delete'>
-              </form>
-            </div>
-          </li>
-        <% }); %>
-      </ul>
-  </div>
-  <% } else { %>
-    <div class='container text-center' style='padding-top: 20px'>
-      <div class='alert alert-info'>
-        <h5>Please Login to View URLs!</h5>
+  <div class='container'>
+    <div class='text-center' style='padding: 10px'>
+      <h2>Your URLs</h2>
+    </div>
+    <% if(user) { %>
+    <table class='table table-condensed align-middle' style='padding: 10px'>
+      <thead>
+        <tr>
+          <th>Short URL</th>
+          <th>Full URL</th>
+          <th>Edit</th>
+          <th class='text-center'>Delete</th>
+          <th class='text-center'>Visits</th>
+          <th class='text-center'>Unique Visits</th>
+          <th>Date Created</th>
+        </tr>
+      </thead>
+      <tbody>
+    <% urls.forEach( function(url) { %>
+        <tr>
+          <td><a href='/u/<%= url.shortUrl %>'><%= url.shortUrl %> </a> &rarr;</td>
+          <td><%= url.longUrl %></td>
+          <td><a href='/urls/<%= url.shortUrl %>'>Edit</a></td>
+          <td class='text-center'><form action='/urls/<%= url.shortUrl %>/delete?_method=DELETE' method='POST' value='Delete'>
+              <input class='btn btn-danger' type='submit' value='Delete'>
+          </form></td>
+          <td class='text-center'><%= url.visits %></td>
+          <td class='text-center'><%= url.visitors.length %></td>
+          <td><%= url.date %></td>
+        </tr>
+    <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+      <div class='alert alert-danger text-center' style='padding: 20px'>
+        <h5>Please login to view URLs.</h5>
+      </div>
+    <% } %>
+      <div class='text-center' style='padding: 20px'>
+        <h4><a href='/urls/new' class='text-center'>Create a New Short Link</a></h4>
       </div>
     </div>
-  <% } %>
-  <div class='container text-center'>
-    <h4><a href='/urls/new' class='text-center'>Create a New Short Link</a></h4>
-  </div>
+  </body>
 
   <% include ./partials/_footer %>
 </body>

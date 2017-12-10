@@ -12,50 +12,36 @@ app.use(methodOverride('_method'));
 app.use(cookieSession( {
   name: 'session',
   secret: token,
-  maxAge: 1000 * 60 * 60
+  maxAge: 1000 * 60 * 60 * 24
 }));
 
 app.set('view engine', 'ejs');
 var PORT = process.env.PORT || 8080; // default port 8080
 const saltRounds = 10;
 
-const users = {
-  "h2h": {
-    id: "h2h",
-    email: "user@example.com",
-    password: bcrypt.hashSync('never', saltRounds)
-  },
-  "lhl": {
-    id: "lhl",
-    email: "ajc@gmail.com",
-    password: bcrypt.hashSync('never', saltRounds)
-  },
- "brb": {
-    id: "brb",
-    email: "user2@example.com",
-    password: bcrypt.hashSync('never', saltRounds)
-  },
-  "visitors": []
-};
-
-const urlDatabase = {
-  'b2xVn2': {
-    userId: 'h2h',
-    shortUrl: 'b2xVn2',
-    longUrl: 'http://www.lighthouselabs.ca',
-    visits: 3,
-    visitors: ['lhl', 'brb'],
-    history: []
-  },
-  '9sm5xK': {
-    userId: 'brb',
-    shortUrl: '9sm5xK',
-    longUrl: 'http://www.google.com',
-    visits: 10,
-    visitors: ['h2h'],
-    history: []
+/* Initiate user and url databases, see below for format
+  users = {
+    'h43ksI': {
+      id: h43ksI,
+      email: user@example.com,
+      password: <hashed password string>
+    }
   }
-};
+
+  urlDatabase = {
+    '4db8Ws': {
+      userId: 'h43ksI',
+      shortUrl: '4db8Ws',
+      longUrl: http://www.google.ca,
+      date: <date object corresponding to date created>,
+      visits: 3,
+      visitors: [h43ksI, 83Ns2x],
+      history: [[<date>, h43ksI], [<date>, 83Ns2x], [<date>, h43ksI]]
+    }
+  }
+*/
+const users = {};
+const urlDatabase = {};
 
 // Generates a random string of
 let generateRandomString = function() {
@@ -90,15 +76,13 @@ let findUser = function(email) {
 // Attempt to register a user and return false if the email exists or the email/password string is empty
 // Return the user object if succesful
 let registerUser = function(email, password) {
-  let conflict = null;
   for(let user in users) {
     if(users[user].email === email) {
-      conflict = true;
+      return false;
     }
   }
+
   if(email === '' || password === '') {
-    return false;
-  } else if(conflict) {
     return false;
   } else {
     let id = generateRandomString();
@@ -137,31 +121,36 @@ app.get('/urls', (req, res) => {
 
   let templateVars = {
     user: users[userId]
-  }
+  };
 
   if(userId) {
     userUrls = urlsForUser(userId);   // If a user is logged in then collect their URLs to display
     templateVars.urls = userUrls;
   }
 
-  res.render("urls_index", templateVars);
+  res.render('urls_index', templateVars);
 });
 
 app.post('/urls', (req, res) => {
   const { userId } = req.session;
-  const { longUrl } = req.body;
+  let { longUrl } = req.body;
   let shortUrl = generateRandomString();
+  let date = new Date();
 
-  urlDatabase[shortUrl] = { userId, shortUrl, longUrl, visits: 0, visitors: [], history: [] };
+  if(!longUrl.startsWith('http://') && !longUrl.startsWith('https://')) {
+    longUrl = 'http://' + longUrl;
+  }
 
-  res.redirect(303, '/urls');   // Redirect to the generated short url after a form submission (${shortUrl} previous redirect)
+  urlDatabase[shortUrl] = { userId, shortUrl, longUrl, date, visits: 0, visitors: [], history: [] };
+
+  res.redirect(303, '/urls');   // Redirect to the urls page after adding a new url (${shortUrl} previous redirect)
 });
 
 /* ---------------- REGISTER ------------------ */
 app.get('/register', (req, res) => {
   let templateVars = { user: req.session.userId, failed: false};
 
-  if(templateVars.user) {
+  if(users[templateVars.user]) {
     res.redirect('/urls');      // If logged in then
   } else {
     if(req.session.registerFailed) {
@@ -176,15 +165,8 @@ app.post('/register', (req, res) => {
   const { email, password } = req.body;
   let user = registerUser(email, password);
 
-  if(user) {      // If generating a new user was successful then add them
-    let id = generateRandomString();
-    users[id] = {
-      id,
-      email: user.email,
-      password: user.password
-    };
-
-    req.session.userId = users[id].id;
+  if(user) {
+    req.session.userId = user.id; // If generating a new user was successful then set that user's cookie to their id
     res.redirect('/urls');
   } else {
     req.session.registerFailed = true;
@@ -197,7 +179,7 @@ app.get('/urls/new', (req, res) => {
   if(req.session.userId) {
     let templateVars = {
       user: users[req.session.userId]
-    }
+    };
 
     res.render('urls_new', templateVars);
   } else {
@@ -210,7 +192,7 @@ app.get('/login', (req, res) => {
   let templateVars = {
     user: users[req.session.userId],
     failed: false
-  }
+  };
   if(req.session.loginFailed) {
     templateVars.failed = true;
     req.session = null;
@@ -218,9 +200,9 @@ app.get('/login', (req, res) => {
 
   if(templateVars.user) {
     res.redirect('/urls');
+  } else {
+    res.render('urls_login', templateVars);
   }
-
-  res.render('urls_login', templateVars);
 });
 
 app.put('/login', (req, res) => {
@@ -246,21 +228,23 @@ app.get('/u/:id', (req, res) => {
   const { id } = req.params;
   let { userId } = req.session;
 
-  if (urlDatabase[id]) {
-    urlDatabase[id].visits += 1;
+  if (!urlDatabase[id]) {
+    req.session.failed = true;
+
+    res.redirect('/u');   // Redirect to a /u page displaying an error if the short URL is not in the database
+  } else {
     if(!userId) {
       userId = generateRandomString();
       req.session.userId = userId;
     }
-    addVisitData(id, userId);
+
     if(uniqueVisitor(id, userId)) {
       urlDatabase[id].visitors.push(userId);
     }
-    res.redirect(307, urlDatabase[id].longUrl);  // Redirect to the longurl if the short URL exists
-  } else {
-    req.session.failed = true;
 
-    res.redirect('/u');   // Redirect to a /u page displaying an error if the short URL is not in the database
+    urlDatabase[id].visits += 1;
+    addVisitData(id, userId);
+    res.redirect(urlDatabase[id].longUrl);  // Redirect to the longurl if the short URL exists
   }
 });
 
@@ -268,7 +252,7 @@ app.get('/u', (req, res) => {
   let templateVars = {
     user: users[req.session.userId],
     failed: false
-  }
+  };
   if(req.session.failed) {
     templateVars.failed = true;
     req.session.failed = null;
@@ -296,7 +280,7 @@ app.get('/urls/:id', (req, res) => {
     shortUrl: id,
     url: urlDatabase[id],
     user: users[req.session.userId]
-  }
+  };
 
   res.render('urls_show', templateVars);
 });

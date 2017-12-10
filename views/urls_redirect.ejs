@@ -8,17 +8,17 @@
 <body>
   <% include ./partials/_header %>
 
-  <div>
-    <div class='container text-center'>
-      <% if(failed) { %>
-        <div class='alert alert-danger'>
-          <h5><strong>Error!</strong> Could Not Find URL</h5>
-        </div>
-      <% } else { %>
-        <div class='alert alert-info'>
-          <h2> Try Using a Short Url to Redirect</h2>
-        </div>
-      <% } %>
+  <div class='container text-center'>
+    <% if(failed) { %>
+      <div class='alert alert-danger'>
+        <h5><strong>Error!</strong> Could not find the URL.</h5>
+      </div>
+    <% } else { %>
+      <div class='alert alert-info'>
+        <h5> Try using a short URL to redirect.</h5>
+      </div>
+    <% } %>
+    <div style='padding: 20px'>
       <h4><a href="/urls">Go Back to URLs</a></h4>
     </div>
   </div>
