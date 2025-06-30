@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-  <% include ./partials/_head %>
+  <%- include('partials/_head'); %>
 </head>
 
 <body>
-  <% include partials/_header %>
+  <%- include('partials/_header'); %>
 
   <div class='container text-center'>
     <div style='padding: 10px'>
@@ -28,7 +28,7 @@
     <h4><a href='/urls'>Go Back to URLs</a></h4>
   </div>
 
-  <% include ./partials/_footer %>
+  <%- include('partials/_footer'); %>
 </body>
 
 </html>
